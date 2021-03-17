@@ -1,0 +1,7 @@
+main: net.initialposition.globalcountdown.InitPlugin
+name: GlobalCountdown
+version: 1.2.0
+description: Shows every user a countdown. When the countdown expires, all users get banned.
+api-version: 1.16
+author: InitialPosition
+website: www.initialposition.net
