@@ -1,7 +1,9 @@
 package net.initialposition.globalcountdown;
 
-import org.bukkit.BanList;
-import org.bukkit.Bukkit;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,11 +25,12 @@ public class LoginListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player newPlayer = event.getPlayer();
         if (expired) {
-            // BAN IF EXPIRED
-            BanList banList = Bukkit.getBanList(BanList.Type.NAME);
-            if (!banList.isBanned(newPlayer.getDisplayName())) {
-                newPlayer.kickPlayer("--=[ " + banReason + " ]=--");
-                banList.addBan(newPlayer.getDisplayName(), banReason, null, null);
+            // send time up message
+            newPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.BOLD + "[ TIME UP! ]"));
+
+            // set to spectator if expired
+            if (newPlayer.getGameMode() != GameMode.SPECTATOR) {
+                newPlayer.setGameMode(GameMode.SPECTATOR);
             }
         }
     }

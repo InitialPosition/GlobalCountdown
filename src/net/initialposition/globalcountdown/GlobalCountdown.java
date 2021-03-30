@@ -3,9 +3,9 @@ package net.initialposition.globalcountdown;
 import net.initialposition.globalcountdown.util.ConsoleLogger;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,12 +13,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Calendar;
 import java.util.Date;
 
-import static net.initialposition.globalcountdown.util.TimeConverter.*;
+import static net.initialposition.globalcountdown.util.TimeConverter.convertDateToTimestamp;
+import static net.initialposition.globalcountdown.util.TimeConverter.getCurrentDatePlusThirtyDays;
 
-public class InitPlugin extends JavaPlugin {
+public class GlobalCountdown extends JavaPlugin {
 
     private final static String CONFIG_REMAINING_TIME = "confEndingTime";
-    private final static String CONFIG_BAN_REASON = "confBanReason";
 
     long endingTime = 0;
     String banReason;
@@ -41,7 +41,6 @@ public class InitPlugin extends JavaPlugin {
             ConsoleLogger.debug_log("Config found! Loading time...");
 
             endingTimestamp = this.getConfig().getLong(CONFIG_REMAINING_TIME);
-            banReason = this.getConfig().getString(CONFIG_BAN_REASON);
 
         } else {
             // we have no time, initialize with 30 days
@@ -51,10 +50,6 @@ public class InitPlugin extends JavaPlugin {
             endingTimestamp = convertDateToTimestamp(finalDate);
 
             this.getConfig().set(CONFIG_REMAINING_TIME, endingTimestamp);
-
-            // default ban reason
-            banReason = "TIME ENDED";
-            this.getConfig().set(CONFIG_BAN_REASON, banReason);
 
             this.saveConfig();
         }
@@ -80,11 +75,9 @@ public class InitPlugin extends JavaPlugin {
             EXPIRED = true;
             loginListener.setExpired();
 
-            // ban everyone
-            BanList banList = Bukkit.getBanList(BanList.Type.NAME);
+            // set everyone to spectator mode
             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                banList.addBan(player.getDisplayName(), banReason, null, null);
-                player.kickPlayer("--=[ " + banReason + " ]=--");
+                player.setGameMode(GameMode.SPECTATOR);
             }
         }
     }
@@ -120,7 +113,7 @@ public class InitPlugin extends JavaPlugin {
             // count down
             endingTime -= 1;
         } else {
-            ConsoleLogger.debug_log("--=[ TIME UP! BAN TIME! ]=--");
+            ConsoleLogger.debug_log("--=[ TIME UP! ]=--");
             // end timer
             Bukkit.getScheduler().cancelTask(countdownTaskID);
 
@@ -131,11 +124,10 @@ public class InitPlugin extends JavaPlugin {
             EXPIRED = true;
             loginListener.setExpired();
 
-            // ban everyone
-            BanList banList = Bukkit.getBanList(BanList.Type.NAME);
+            // set everyone to spectator mode
             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                banList.addBan(player.getDisplayName(), banReason, null, null);
-                player.kickPlayer("--=[ " + banReason + " ]=--");
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.BOLD + "[ TIME UP! ]"));
+                player.setGameMode(GameMode.SPECTATOR);
             }
         }
     }

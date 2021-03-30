@@ -9,10 +9,10 @@ _"Because everything ends eventually"_
 
 ## Introduction
 GlobalCountdown adds an expiration date to your Minecraft server.
-A countdown is displayed for all players. Once the time reaches zero, every player will be banned.
+A countdown is displayed for all players. Once the time reaches zero, every player will be set to spectator mode.
 
 ## Functions
-- Custom ban message and time
+- Ingame timer
 - Thats it this plugin doesn't have that many features
 
 ## Installation
@@ -25,4 +25,3 @@ The following parameters exist in the config file and can be changed.
 | Parameter | Usage | Accepted input |
 | :-------- | ----- | -------------- |
 | confEndingTime | The date at which to ban all players | A UNIX timestamp |
-| confBanReason | The message to show players once time ends | String |
