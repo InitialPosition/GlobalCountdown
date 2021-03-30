@@ -24,4 +24,4 @@ The following parameters exist in the config file and can be changed.
 
 | Parameter | Usage | Accepted input |
 | :-------- | ----- | -------------- |
-| confEndingTime | The date at which to ban all players | A UNIX timestamp |
+| confEndingTime | The date at which to set all players to spectator mode | A UNIX timestamp |
